@@ -33,6 +33,11 @@ export function request(_options) {
     body,
   })
     .then((response) => {
+      if (url === '/api/method/frappe.desk.search.search_link') {
+        return response.json().then((data) => {
+         return data.results
+        })
+      }
       if (options.transformResponse) {
         return options.transformResponse(response, options)
       }
