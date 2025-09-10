@@ -4,7 +4,7 @@
       <slot name="left">
         <TabButtons
           v-model="pageLengthCount"
-          :buttons="pageLengthOptions.map((o) => ({ label: o, value: o }))"
+          :buttons="pageLengthOptions.map((o) => ({ label: o.toString(), value: o }))"
         />
       </slot>
       <slot name="right">
@@ -16,9 +16,9 @@
           />
           <div v-if="showLoadMore" class="mx-3 h-[80%] border-l" />
           <div class="flex items-center gap-1 text-base text-ink-gray-5">
-            <div>{{ options.rowCount || '0' }}</div>
+            <div>{{ options.rowCount.toString() || '0' }}</div>
             <div>of</div>
-            <div>{{ options.totalCount || '0' }}</div>
+            <div>{{ options.totalCount.toString() || '0' }}</div>
           </div>
         </div>
       </slot>
