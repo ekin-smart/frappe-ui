@@ -6,6 +6,9 @@ import { lucideIcons } from './vite/lucideIcons'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [vue(), lucideIcons()],
+  build: {
+    sourcemap: process.env.NODE_ENV !== 'production',
+  },
   resolve: {
     alias: {
       'tailwind.config.js': path.resolve(__dirname, 'tailwind.config.js'),
