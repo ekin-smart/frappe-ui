@@ -238,7 +238,7 @@ service.
 <script setup>
 import { createResource } from 'frappe-ui'
 let todos = createResource({
-  url: '/api/method/frappe.client.get_list',
+  url: '/api/method/ekin_orbit.api.client.get_list',
   params: {
     doctype: 'ToDo',
     filters: {
@@ -279,8 +279,8 @@ from `message` key and error from `exc`.
 <script setup>
 import { createResource } from 'frappe-ui'
 let todos = createResource({
-- url: '/api/method/frappe.client.get_list',
-+ url: 'frappe.client.get_list',
+- url: '/api/method/ekin_orbit.api.client.get_list',
++ url: 'ekin_orbit.api.client.get_list',
   params: {
     doctype: 'ToDo',
     filters: {

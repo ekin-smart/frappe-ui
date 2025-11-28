@@ -23,13 +23,13 @@ export function createListResource(options, vm) {
     }
   }
 
-  let defaultListUrl = getConfig('defaultListUrl') || 'frappe.client.get_list'
+  let defaultListUrl = getConfig('defaultListUrl') || 'ekin_orbit.api.client.get_list'
   let defaultDocInsertUrl =
-    getConfig('defaultDocInsertUrl') || 'frappe.client.insert'
+    getConfig('defaultDocInsertUrl') || 'ekin_orbit.api.client.insert'
   let defaultDocUpdateUrl =
-    getConfig('defaultDocUpdateUrl') || 'frappe.client.set_value'
+    getConfig('defaultDocUpdateUrl') || 'ekin_orbit.api.client.set_value'
   let defaultDocDeleteUrl =
-    getConfig('defaultDocDeleteUrl') || 'frappe.client.delete'
+    getConfig('defaultDocDeleteUrl') || 'ekin_orbit.api.client.delete'
   let defaultRunDocMethodUrl =
     getConfig('defaultRunDocMethodUrl') || 'run_doc_method'
 

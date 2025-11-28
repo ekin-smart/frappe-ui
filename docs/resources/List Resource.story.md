@@ -119,7 +119,7 @@ let todos = createListResource({
     // or an array that can be serialized
     cache: ['todos', 'faris@frappe.io'],
 
-    // default value for url is "frappe.client.get_list"
+    // default value for url is "ekin_orbit.api.client.get_list"
     // specify url if you want to use a custom API method
     url: 'todo_app.api.get_todos',
 
