@@ -15,6 +15,7 @@ export interface MentionSuggestionItem extends BaseSuggestionItem {
   value?: string
   email?: string
   full_name?: string
+  user_image?: string
 }
 
 function createMentionNode(component?: Component) {
@@ -103,15 +104,35 @@ const MentionSuggestionExtension =
     addOptions() {
       return {
         mentions: [],
+        searchFunction: null,
+        suggestionComponent: null,
       }
     },
 
-    items: ({ query, editor }) => {
-      const { mentions: _mentions } = editor.extensionManager.extensions.find(
+    items: async ({ query, editor }) => {
+      const extension = editor.extensionManager.extensions.find(
         (ext) => ext.name === 'mentionSuggestion',
-      )!.options
-      const mentions = toValue(_mentions)
+      )!
+      const { mentions: _mentions, searchFunction } = extension.options
 
+      // If searchFunction is provided, use it for live search
+      if (searchFunction && typeof searchFunction === 'function') {
+        try {
+          const results = await searchFunction(query)
+          return results
+            .slice(0, 10)
+            .map((mention: MentionSuggestionItem) => ({
+              ...mention,
+              display: mention.label,
+            }))
+        } catch (error) {
+          console.error('Mention search error:', error)
+          return []
+        }
+      }
+
+      // Otherwise, fall back to static array filtering
+      const mentions = toValue(_mentions)
       const filtered = mentions
         .filter((mention: MentionSuggestionItem) =>
           mention.label.toLowerCase().startsWith(query.toLowerCase()),
@@ -159,6 +180,8 @@ const MentionSuggestionExtension =
 export const MentionExtension = Extension.create<{
   mentions: MaybeRefOrGetter<MentionSuggestionItem[]>
   component?: Component
+  searchFunction?: (query: string) => Promise<MentionSuggestionItem[]> | MentionSuggestionItem[]
+  suggestionComponent?: Component
 }>({
   name: 'mentionExtension',
 
@@ -166,15 +189,24 @@ export const MentionExtension = Extension.create<{
     return {
       mentions: [],
       component: undefined,
+      searchFunction: undefined,
+      suggestionComponent: undefined,
     }
   },
 
   addExtensions() {
+    const suggestionConfig: any = {
+      mentions: this.options.mentions,
+      searchFunction: this.options.searchFunction,
+    }
+
+    if (this.options.suggestionComponent) {
+      suggestionConfig.component = this.options.suggestionComponent
+    }
+
     return [
       createMentionNode(this.options.component),
-      MentionSuggestionExtension.configure({
-        mentions: this.options.mentions,
-      }),
+      MentionSuggestionExtension.configure(suggestionConfig),
     ]
   },
 })

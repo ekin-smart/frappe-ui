@@ -4,8 +4,10 @@ import { type MentionSuggestionItem } from './extensions/mention/mention-extensi
 
 type ConfigureMentionOptions =
   | {
-      mentions: MentionSuggestionItem[]
+      mentions?: MentionSuggestionItem[]
       component?: Component
+      searchFunction?: (query: string) => Promise<MentionSuggestionItem[]> | MentionSuggestionItem[]
+      suggestionComponent?: Component
     }
   | MentionSuggestionItem[]
   | null

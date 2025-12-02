@@ -210,8 +210,10 @@ onMounted(() => {
           Array.isArray(props.mentions)
             ? { mentions: props.mentions }
             : {
-                mentions: props.mentions.mentions,
+                mentions: props.mentions.mentions || [],
                 component: props.mentions.component,
+                searchFunction: props.mentions.searchFunction,
+                suggestionComponent: props.mentions.suggestionComponent,
               },
         ),
       EmojiExtension,
