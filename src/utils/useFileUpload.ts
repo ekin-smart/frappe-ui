@@ -179,7 +179,7 @@ async function upload(
       }
     }
 
-    const uploadEndpoint = options.upload_endpoint || '/api/method/upload_file'
+    const uploadEndpoint = options.upload_endpoint || '/api/method/ekin_orbit.api.file.upload_file'
     xhr.open('POST', uploadEndpoint, true)
     xhr.setRequestHeader('Accept', 'application/json')
 
