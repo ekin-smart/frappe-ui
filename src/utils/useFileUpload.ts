@@ -192,7 +192,7 @@ async function upload(
       formData.append('file', file, file.name)
     }
 
-    formData.append('is_private', options.private ? '1' : '0')
+    formData.append('is_private', '1')
     formData.append('folder', options.folder || 'Home')
 
     if (options.file_url) {
