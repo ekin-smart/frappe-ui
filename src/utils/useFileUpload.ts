@@ -183,8 +183,10 @@ async function upload(
     xhr.open('POST', uploadEndpoint, true)
     xhr.setRequestHeader('Accept', 'application/json')
 
-    if (window.csrf_token && window.csrf_token !== '{{ csrf_token }}') {
-      xhr.setRequestHeader('X-Frappe-CSRF-Token', window.csrf_token)
+    // Use API token authentication instead of CSRF
+    const apiToken = getApiToken()
+    if (apiToken) {
+      xhr.setRequestHeader('Authorization', `token ${apiToken}`)
     }
 
     const formData = new FormData()
@@ -238,11 +240,25 @@ async function upload(
   })
 }
 
-// Add the Window interface for typescript
-declare global {
-  interface Window {
-    csrf_token?: string
+/**
+ * Get API token from cookie storage
+ * This follows the same pattern as the tokenManager in frontend
+ */
+function getApiToken(): string | null {
+  // Try to get token from cookie
+  const cookies = document.cookie.split('; ')
+  for (const cookie of cookies) {
+    const [name, value] = cookie.split('=')
+    if (name === 'ekinOrbitLoginData') {
+      try {
+        const data = JSON.parse(decodeURIComponent(value))
+        return data?.access_token || null
+      } catch (e) {
+        return null
+      }
+    }
   }
+  return null
 }
 
 export { upload }
