@@ -14,6 +14,22 @@ export interface UploadOptions {
   max_width?: number
   max_height?: number
   params?: object
+  /**
+   * Optional function to provide API token for authentication
+   * If not provided, no token will be sent (falls back to session auth)
+   * 
+   * Example:
+   * ```typescript
+   * import { getApiToken } from '@/utils/tokenGetter'
+   * 
+   * const { upload } = useFileUpload()
+   * await upload(file, {
+   *   folder: 'Home',
+   *   getApiToken: getApiToken
+   * })
+   * ```
+   */
+  getApiToken?: () => string | null
 }
 
 export interface UploadState {
@@ -184,7 +200,8 @@ async function upload(
     xhr.setRequestHeader('Accept', 'application/json')
 
     // Use API token authentication instead of CSRF
-    const apiToken = getApiToken()
+    const tokenGetter = options.getApiToken || getApiToken
+    const apiToken = tokenGetter()
     if (apiToken) {
       xhr.setRequestHeader('Authorization', `token ${apiToken}`)
     }
@@ -241,23 +258,10 @@ async function upload(
 }
 
 /**
- * Get API token from cookie storage
- * This follows the same pattern as the tokenManager in frontend
+ * Default fallback token getter - returns null
+ * Applications should provide their own token getter via options.getApiToken
  */
 function getApiToken(): string | null {
-  // Try to get token from cookie
-  const cookies = document.cookie.split('; ')
-  for (const cookie of cookies) {
-    const [name, value] = cookie.split('=')
-    if (name === 'ekinOrbitLoginData') {
-      try {
-        const data = JSON.parse(decodeURIComponent(value))
-        return data?.access_token || null
-      } catch (e) {
-        return null
-      }
-    }
-  }
   return null
 }
 
