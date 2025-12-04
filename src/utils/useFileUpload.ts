@@ -17,11 +17,11 @@ export interface UploadOptions {
   /**
    * Optional function to provide API token for authentication
    * If not provided, no token will be sent (falls back to session auth)
-   * 
+   *
    * Example:
    * ```typescript
    * import { getApiToken } from '@/utils/tokenGetter'
-   * 
+   *
    * const { upload } = useFileUpload()
    * await upload(file, {
    *   folder: 'Home',
